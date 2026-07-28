@@ -62,8 +62,7 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="min-h-[calc(100vh+30px)] bg-[#323a4d] flex flex-col items-center justify-between pt-5 pb-8 px-4 select-none box-border">
-      
+    <div className="min-h-screen bg-[#323a4d] flex flex-col items-center justify-between pt-5 pb-8 px-4 select-none box-border">
       {/* Upper Section: Logo + Form Card */}
       <div className="w-full flex flex-col items-center">
         {/* Mero Share Logo */}

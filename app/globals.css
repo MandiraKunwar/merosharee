@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --background: #323a4d;
+  --foreground: #ffffff;
 }
 
 @theme inline {
@@ -12,19 +12,23 @@
   --font-mono: var(--font-geist-mono);
 }
 
+/* Force dark mode query to also use your blue theme instead of black */
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: #323a4d;
+    --foreground: #ffffff;
   }
 }
 
-body {
+html, body {
+  background-color: #323a4d;
   background: var(--background);
   color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
 }
 
 html {
-  color-scheme: light;
+  color-scheme: dark;
 }

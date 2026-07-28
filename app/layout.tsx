@@ -25,11 +25,11 @@ const geistMono = Geist_Mono({
   subsets: ["latin"],
 });
 
-
 export const metadata: Metadata = {
   title: "Mero Share",
   description: "MeroShare - CDSC",
 };
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -38,9 +38,9 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
+      className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-[#323a4d]`}
     >
-      <body className={`${robotoCondensed.className} ${dosis.variable}`}>
+      <body className={`${robotoCondensed.className} ${dosis.variable} h-full bg-[#323a4d]`}>
         {children}
       </body>
     </html>
