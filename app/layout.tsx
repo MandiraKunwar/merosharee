@@ -28,6 +28,28 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   title: "Mero Share",
   description: "MeroShare - CDSC",
+  openGraph: {
+    title: "Mero Share",
+    description: "MeroShare - CDSC Login Portal",
+    url: "https://your-deployed-url.vercel.app", // Replace with your actual live domain later
+    siteName: "Mero Share",
+    images: [
+      {
+        url: "/logo.jpg",
+        width: 500,
+        height: 500,
+        alt: "Mero Share Logo",
+      },
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary",
+    title: "Mero Share",
+    description: "MeroShare - CDSC Login Portal",
+    images: ["/logo.jpg"],
+  },
 };
 
 export default function RootLayout({
