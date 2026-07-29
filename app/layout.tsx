@@ -26,6 +26,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
+  metadataBase: new URL("https://merosharee.vercel.app"), // <--- CRITICAL: Required for Next.js to build absolute image URLs
   title: "Mero Share",
   description: "MeroShare - CDSC",
   openGraph: {
@@ -65,18 +66,8 @@ export default function RootLayout({
       <head>
         <link rel="icon" href="/logo.jpg" />
       </head>
-      <body className={`${robotoCondensed.className} ${dosis.variable} min-h-screen relative overflow-x-hidden text-white bg-[#323a4d]`}>
-        
-        {/* Optional: Background Image URL layer (Change '/mero-bg.jpg' to your image filename if you have one) */}
-        <div 
-          className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 pointer-events-none"
-          style={{ backgroundImage: "url('/mero-bg.jpg')" }}
-        />
-        
-        {/* Page Content */}
-        <div className="relative z-10 min-h-screen flex flex-col justify-between">
-          {children}
-        </div>
+      <body className={`${robotoCondensed.className} ${dosis.variable} h-full bg-[#323a4d]`}>
+        {children}
       </body>
     </html>
   );
