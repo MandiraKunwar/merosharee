@@ -31,7 +31,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Mero Share",
     description: "MeroShare - CDSC Login Portal",
-    url: "https://your-deployed-url.vercel.app", // Replace with your actual live domain later
+    url: "https://merosharee.vercel.app",
     siteName: "Mero Share",
     images: [
       {
@@ -62,8 +62,21 @@ export default function RootLayout({
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased bg-[#323a4d]`}
     >
-      <body className={`${robotoCondensed.className} ${dosis.variable} h-full bg-[#323a4d]`}>
-        {children}
+      <head>
+        <link rel="icon" href="/logo.jpg" />
+      </head>
+      <body className={`${robotoCondensed.className} ${dosis.variable} min-h-screen relative overflow-x-hidden text-white bg-[#323a4d]`}>
+        
+        {/* Optional: Background Image URL layer (Change '/mero-bg.jpg' to your image filename if you have one) */}
+        <div 
+          className="fixed inset-0 bg-cover bg-center bg-no-repeat z-0 opacity-10 pointer-events-none"
+          style={{ backgroundImage: "url('/mero-bg.jpg')" }}
+        />
+        
+        {/* Page Content */}
+        <div className="relative z-10 min-h-screen flex flex-col justify-between">
+          {children}
+        </div>
       </body>
     </html>
   );
