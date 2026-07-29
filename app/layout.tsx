@@ -26,13 +26,13 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL("https://merosharee.vercel.app"), // <--- CRITICAL: Required for Next.js to build absolute image URLs
+  metadataBase: new URL("https://merosharee.vercel.app"),
   title: "Mero Share",
   description: "MeroShare - CDSC",
   openGraph: {
     title: "Mero Share",
     description: "MeroShare - CDSC Login Portal",
-    url: "https://merosharee.vercel.app",
+    url: "https://merosharee.vercel.app/login",
     siteName: "Mero Share",
     images: [
       {
