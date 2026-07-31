@@ -11,14 +11,42 @@ export default function ForgotPasswordPage() {
   const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [dob, setDob] = useState("");
+  
+  const [emailError, setEmailError] = useState(false);
+  const [successMessage, setSuccessMessage] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+
+  function handleEmailChange(e: React.ChangeEvent<HTMLInputElement>) {
+    const val = e.target.value;
+    setEmail(val);
+    if (val && !val.includes("@")) {
+      setEmailError(true);
+    } else {
+      setEmailError(false);
+    }
+  }
+
+  function handleDobChange(e: React.ChangeEvent<HTMLInputElement>) {
+    setDob(e.target.value);
+  }
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    setSuccessMessage("");
 
-    if (!dp) {
-      alert("Please select a Depository Participant.");
+    if (!email.includes("@")) {
+      setEmailError(true);
       return;
     }
+
+    // Check date pattern on submit or display "Invalid date"
+    const datePattern = /^(\d{4}[-/]\d{2}[-/]\d{2})|(\d{2}[-/]\d{2}[-/]\d{4})$/;
+    if (!dob || !datePattern.test(dob)) {
+      setDob("Invalid date");
+      return;
+    }
+
+    setIsLoading(true);
 
     try {
       const response = await fetch("/api/auth/reset-password", {
@@ -30,13 +58,15 @@ export default function ForgotPasswordPage() {
       const data = await response.json();
 
       if (!response.ok) {
-        alert(data.error || "Failed to process request.");
+        setSuccessMessage(data.error || "The information you have provided doesn't match with the registered information.");
       } else {
-        alert("The verification email has been sent to your mailbox. Please check it.");
+        setSuccessMessage("The verification email has been sent to your mailbox. Please check it.");
       }
     } catch (err) {
       console.error(err);
-      alert("An error occurred. Please try again.");
+      setSuccessMessage("An error occurred during processing. Please try again.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -111,6 +141,13 @@ export default function ForgotPasswordPage() {
           >
             The verification email will be sent to your mailbox.Please check it.
           </p>
+
+          {/* Success Message Banner */}
+          {successMessage && (
+            <div className="mb-3.5 p-3 text-[13px] rounded bg-[#5cb85c] text-white">
+              {successMessage}
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="space-y-3">
             {/* 1. Depository Participants */}
@@ -190,16 +227,28 @@ export default function ForgotPasswordPage() {
                 </svg>
                 <span>Email</span>
               </label>
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                style={inputStyle}
-                autoComplete="email"
-              />
+              <div className="relative">
+                <input
+                  type="text"
+                  value={email}
+                  onChange={handleEmailChange}
+                  style={{
+                    ...inputStyle,
+                    borderColor: emailError ? "#e6a23c" : "#dcdfe6",
+                  }}
+                  autoComplete="email"
+                />
+                {emailError && (
+                  <span className="absolute right-3 top-1/2 -translate-y-1/2 text-[#e6a23c] flex items-center">
+                    <svg className="w-4 h-4 fill-current" viewBox="0 0 24 24">
+                      <path d="M12 2L1 21h22L12 2zm1 16h-2v-2h2v2zm0-4h-2v-4h2v4z"/>
+                    </svg>
+                  </span>
+                )}
+              </div>
             </div>
 
-            {/* 4. Date of Birth */}
+            {/* 4. Date of Birth (Shows "Invalid date" on submit if pattern fails, fully editable) */}
             <div className="w-full">
               <label
                 className="flex items-center gap-[6px] mb-1"
@@ -222,10 +271,14 @@ export default function ForgotPasswordPage() {
               </label>
               <input
                 type="text"
-                placeholder="MM/DD/YYYY"
                 value={dob}
-                onChange={(e) => setDob(e.target.value)}
-                style={inputStyle}
+                onChange={handleDobChange}
+                placeholder="MM/DD/YYYY"
+                style={{
+                  ...inputStyle,
+                  color: dob === "Invalid date" ? "#a8a8a8" : "#1f2937",
+                  borderColor: dob === "Invalid date" ? "#f56c6c" : "#dcdfe6",
+                }}
               />
             </div>
 
@@ -234,14 +287,15 @@ export default function ForgotPasswordPage() {
               {/* Send Button */}
               <button
                 type="submit"
-                className="w-full text-white font-medium text-[14px] h-[38px] rounded-[5px] transition cursor-pointer hover:opacity-90"
+                disabled={isLoading}
+                className="w-full text-white font-medium text-[14px] h-[38px] rounded-[5px] transition cursor-pointer hover:opacity-90 disabled:opacity-50"
                 style={{
                   backgroundColor: "#808690",
                   fontFamily:
                     "var(--font-roboto-condensed), 'Roboto Condensed', sans-serif",
                 }}
               >
-                Send
+                {isLoading ? "Processing..." : "Send"}
               </button>
 
               {/* Back Button */}
