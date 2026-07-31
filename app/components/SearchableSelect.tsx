@@ -53,6 +53,7 @@ export default function SearchableSelect({
       {/* Selector Box */}
       <button
         type="button"
+        suppressHydrationWarning={true}
         onClick={() => setIsOpen(!isOpen)}
         className={`w-full h-[35px] bg-white border border-[#d0d7de] px-2.5 flex items-center justify-between text-[13.5px] outline-none cursor-pointer ${
           isOpen ? "rounded-t-[3px]" : "rounded-[3px]"
@@ -95,6 +96,7 @@ export default function SearchableSelect({
             <input
               ref={searchInputRef}
               type="text"
+              suppressHydrationWarning={true}
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
               className="w-full h-[30px] bg-white border border-[#d0d7de] focus:border-[#b0b7be] rounded-[2px] px-2 text-[13px] text-[#151B1E] outline-none shadow-none"
